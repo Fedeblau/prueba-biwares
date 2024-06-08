@@ -5,24 +5,31 @@ import {ResponsiveBar} from '@nivo/bar';
 export const BarChart = (props) => {
     const data = props.data;
   
-    const ratingCounts = {};
-  
-    data.forEach(item => {
-      const rating = item.rating;
-      ratingCounts[rating] = (ratingCounts[rating] || 0) + 1;
-    });
-  
-    const barChartData = Object.keys(ratingCounts).map(rating => ({
-      rating: rating,
-      count: ratingCounts[rating]
-    }));
+    const getYears = (data) => {
+        // Crear un conjunto para almacenar los valores únicos
+        let valoresUnicos = new Set();
+    
+        // Iterar sobre los objetos en los datos
+        data.forEach((dato) => {
+            // Agregar el valor de la clave "year" al conjunto
+            valoresUnicos.add(dato.year);
+        });
+    
+        // Convertir el conjunto de valores únicos a un array y devolverlo
+        return Array.from(valoresUnicos);
+    }
+
+    const years = getYears(data)
+
+    console.log("years ", years)
+
   
     return (
       <div {...props}>
         <ResponsiveBar
-          data={barChartData}
-          keys={["count"]}
-          indexBy="rating"
+          data={data}
+          keys={["average_rating"]}
+          indexBy="year"
           margin={{ top: 0, right: 0, bottom: 40, left: 40 }}
           padding={0.3}
           colors={["#2563eb"]}
