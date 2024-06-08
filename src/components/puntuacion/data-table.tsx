@@ -1,0 +1,178 @@
+"use client"
+
+import * as React from "react"
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table"
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
+import { DataTableFacetedFilter } from "./filtro"
+import StarRating from './star-rating';
+import { DataTablePagination } from './datatable-pagination'; 
+
+
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+}
+
+export function DataTable<TData extends { id: string }, TValue>({
+  columns,
+  data: initialData,
+}: DataTableProps<TData, TValue>) {
+  const [data, setData] = React.useState(initialData)
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [editingRowId, setEditingRowId] = React.useState<string | null>(null)
+  const [newUserScore, setNewUserScore] = React.useState<number>(0)
+
+  const generos = [
+    { label: 'Action', value: 'Action' },
+    { label: 'Adventure', value: 'Adventure' },
+    { label: 'Animation', value: 'Animation' },
+    { label: "Children's", value: "Children's" },
+    { label: 'Comedy', value: 'Comedy' },
+    { label: 'Crime', value: 'Crime' },
+    { label: 'Documentary', value: 'Documentary' },
+    { label: 'Drama', value: 'Drama' },
+    { label: 'Fantasy', value: 'Fantasy' },
+    { label: 'Film-Noir', value: 'Film-Noir' },
+    { label: 'Horror', value: 'Horror' },
+    { label: 'Musical', value: 'Musical' },
+    { label: 'Mystery', value: 'Mystery' },
+    { label: 'Romance', value: 'Romance' },
+    { label: 'Sci-Fi', value: 'Sci-Fi' },
+    { label: 'Thriller', value: 'Thriller' },
+    { label: 'War', value: 'War' },
+    { label: 'Western', value: 'Western' },
+  ];
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      sorting,
+      columnFilters,
+    },
+  })
+
+  const handleEdit = (rowId: string, currentScore: number) => {
+    setEditingRowId(rowId)
+    setNewUserScore(currentScore)
+  }
+
+  const handleSave = (rowId: string) => {
+    setData((prevData) =>
+      prevData.map((row) =>
+        ((row.id)*1)-1 == rowId ? { ...row, user_score: newUserScore } : row
+      )
+    )
+    setEditingRowId(null)
+  }
+
+  return (
+    <>
+      <div className="flex w-full items-center py-2">
+        <Input
+          placeholder="Busca película"
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        {table.getColumn("genero") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("genero")}
+            title="genero"
+            options={generos}
+          />
+        )}
+      </div>
+      <div className="rounded-md w-full border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  )
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {cell.column.id === "user_score" && row.id === editingRowId ? (
+                        <StarRating
+                          currentRating={newUserScore}
+                          onRatingChange={setNewUserScore}
+                        />
+                      ) : (
+                        flexRender(cell.column.columnDef.cell, cell.getContext())
+                      )}
+                    </TableCell>
+                  ))}
+                  <TableCell>
+                    {row.id === editingRowId ? (
+                      <Button variant="borde" className="h-8 w-full px-4" onClick={() => handleSave(row.id)}>Save</Button>
+                    ) : (
+                      <Button variant="borde" className="h-8 w-full px-4" onClick={() => handleEdit(row.id, row.getValue('user_score'))}>{row.getValue('user_score') ? "Cambiar puntaje" : "Puntuar"}</Button>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length + 1} className="h-24 text-center">
+                  sin resultados
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+      <DataTablePagination table={table} />
+      </div>
+    </>
+  )
+}
