@@ -39,6 +39,31 @@ export function Login() {
     }
   };
 
+
+//   const handleLogin = async (event: React.FormEvent) => {
+//     event.preventDefault();
+
+//     try {
+//         const response = await fetch('https://script.google.com/macros/s/AKfycbyzFbdkHoPBORZcFBX1Ob-cp0W6qHa3hUWBXrBg35sceGmpjUZlRjMwt44tj3z_D4Dtgw/exec?id=${username}&password=${password}', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify({ userId, password })
+//         });
+
+//         if (response.ok) {
+//             const data = await response.json();
+//             setLoginResponse(data);
+//             setError(''); // Clear any previous errors
+//         } else {
+//             setError('Invalid login credentials');
+//         }
+//     } catch (error) {
+//         setError('An error occurred during login. Please try again.');
+//     }
+// };
+
   return (
     <Card className="mx-auto w-[30rem] border-none bg-black max-w-md font-body text-white">
       <CardHeader className="">

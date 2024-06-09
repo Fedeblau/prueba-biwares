@@ -9,9 +9,9 @@ interface StarRatingProps {
     onRatingChange: (rating: number) => void;
 }
 
-const StarRating: React.FC<StarRatingProps> = ({ currentRating, onRatingChange }) => {
+const StarRating: React.FC<StarRatingProps> = ({ currentRating, onRatingChange, isEditing }) => {
     return (
-        <div className='flex justify-center'>
+        <div className={isEditing? 'text-xl flex justify-center':'flex justify-center'}>
             {[1, 2, 3, 4, 5].map((star) => (
                 <>
                     <FaStar

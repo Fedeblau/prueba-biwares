@@ -83,6 +83,10 @@ export function DataTable<TData extends { id: string }, TValue>({
     setEditingRowId(rowId)
     setNewUserScore(currentScore)
   }
+  const handleDelete = (rowId: string) => {
+    setEditingRowId(rowId)
+    setNewUserScore(null)
+  }
 
   const handleSave = (rowId: string) => {
     setData((prevData) =>
@@ -145,6 +149,7 @@ export function DataTable<TData extends { id: string }, TValue>({
                     <TableCell key={cell.id}>
                       {cell.column.id === "user_score" && row.id === editingRowId ? (
                         <StarRating
+                          isEditing={editingRowId}
                           currentRating={newUserScore}
                           onRatingChange={setNewUserScore}
                         />
@@ -157,7 +162,10 @@ export function DataTable<TData extends { id: string }, TValue>({
                     {row.id === editingRowId ? (
                       <Button variant="borde" className="h-8 w-full px-4" onClick={() => handleSave(row.id)}>Guardar Puntaje</Button>
                     ) : (
-                      <Button variant="borde" className="h-8 w-full px-4" onClick={() => handleEdit(row.id, row.getValue('user_score'))}>{row.getValue('user_score') ? "Cambiar puntaje" : "Puntuar"}</Button>
+                      <div className="flex gap-1">
+                        <Button variant="borde" className="h-8 w-full px-4" onClick={() => handleEdit(row.id, row.getValue('user_score'))}>{row.getValue('user_score') ? "Cambiar puntaje" : "Puntuar"}</Button>
+                        <Button  className="h-8 px-4" onClick={() => handleDelete(row.id)}>X</Button>
+                      </div>
                     )}
                   </TableCell>
                 </TableRow>

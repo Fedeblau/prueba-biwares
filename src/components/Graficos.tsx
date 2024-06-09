@@ -212,10 +212,10 @@ const Graficos: React.FC<GraficosProps> = () => {
 
 
     if (loading) {
-        return(<>
-        <h2>Cargando...</h2>
-            <div className="w-full h-screen flex items-center justify-center">
-            <div role="status" className="p-4 w-5/12 mx-4 rounded border border-gray-200 shadow animate-pulse md:p-6 border-gray-700">
+        return(<div className="flex flex-col " > 
+            <h2 className="text-white mx-auto mt-28 mb-16 ">Cargando...</h2>
+            <div className="w-full flex items-center justify-center">
+            <div role="status" className="p-4 w-5/12 mx-4 rounded border shadow animate-pulse md:p-6 border-gray-700">
    
            <div className="h-2.5  rounded-full bg-gray-700 w-32 mb-2.5"></div>
            <div className="mb-10 w-48 h-2  rounded-full bg-gray-700"></div>
@@ -245,8 +245,8 @@ const Graficos: React.FC<GraficosProps> = () => {
            </div>
            <span className="sr-only">Loading...</span>
            </div>
-       </div>;
-        </>
+       </div>
+        </div>
         )
         
        

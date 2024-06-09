@@ -6,7 +6,7 @@ function Skeleton({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className="flex items-center justify-center  w-full h-screen text-white">
+    <div className="flex flex-col items-center justify-center  w-full h-screen text-white">
       <h2>Cargando...</h2>
       <Table>
         <TableCaption>        <div
