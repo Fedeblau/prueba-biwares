@@ -197,8 +197,7 @@ const Graficos: React.FC<GraficosProps> = () => {
                     });
                 });
 
-                console.log("genreRatingCounts", genreRatingCounts);
-
+                
                 setHistograma(genreRatingCounts);
 
                 setData(genreYearAvgRating);

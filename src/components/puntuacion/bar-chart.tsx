@@ -12,7 +12,7 @@ export const BarChart = (props: any) => {
     const [graf, setGraf] = useState(data);
     const [histoGraf, setHistoGraf] = useState(data);
     const [peliPorRating, setPeliPorRating] = useState([]);
-    const [mostrarPeli, setMostrarPeli] = useState([]);
+    const [mostrarPeli, setMostrarPeli] = useState(["No hay títulos que mostrar"]);
     const genres = ['Action', 'Adventure', 'Animation', "Children's", 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western'];
 
     function transformarObjetoAArray(obj: any) {
@@ -32,16 +32,15 @@ export const BarChart = (props: any) => {
 
     useEffect(() => {
             const pelis = Object.fromEntries(peliPorRating)[user?.id];
-            console.log(pelis)
+            
             if (pelis) {
                 const res = pelis.map((peliId: number) => {
                     const peli = peliculas.find((p: { id: number }) => p.id == peliId);
                     return peli ? peli.Name : 'No votaste ninguna peli en este rango';
                 });
-                console.log("reesssss",res)
                 setMostrarPeli(res);
         }
-        else{return "No votaste ninguna peli en este rango"}
+        else{setMostrarPeli(["No hay títulos que mostrar"])}
     }, [peliPorRating]);
 
     return (
