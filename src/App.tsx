@@ -9,7 +9,7 @@ function App() {
   return (
     <UserProvider>
       <Router>
-        <div className='flex items-center h-screen  '>
+        <div className='flex items-center h-[100dvh]  '>
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
