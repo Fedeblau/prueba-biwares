@@ -15,12 +15,12 @@ const StarRating: React.FC<StarRatingProps> = ({ currentRating, onRatingChange }
             {[1, 2, 3, 4, 5].map((star) => (
                 <>
                     <FaStar
-                        key={star}
+                        key={star * Math.random()}
                         className={star <= currentRating ? "text-yellow-500" : "hidden"}
                         onClick={() => onRatingChange(star)}
                     />
                     <FaRegStar
-                        key={star}
+                        key={star * Math.random()}
                         className={star <= currentRating ? "hidden" : "text-yellow-500" }
                         onClick={() => onRatingChange(star)}
                     />

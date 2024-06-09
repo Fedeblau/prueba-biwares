@@ -155,7 +155,7 @@ export function DataTable<TData extends { id: string }, TValue>({
                   ))}
                   <TableCell>
                     {row.id === editingRowId ? (
-                      <Button variant="borde" className="h-8 w-full px-4" onClick={() => handleSave(row.id)}>Save</Button>
+                      <Button variant="borde" className="h-8 w-full px-4" onClick={() => handleSave(row.id)}>Guardar Puntaje</Button>
                     ) : (
                       <Button variant="borde" className="h-8 w-full px-4" onClick={() => handleEdit(row.id, row.getValue('user_score'))}>{row.getValue('user_score') ? "Cambiar puntaje" : "Puntuar"}</Button>
                     )}

@@ -7,6 +7,7 @@ function Skeleton({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div className="flex items-center justify-center  w-full h-screen text-white">
+      <h2>Cargando...</h2>
       <Table>
         <TableCaption>        <div
           className={cn("animate-pulse rounded-md w-full  bg-slate-800", className)}

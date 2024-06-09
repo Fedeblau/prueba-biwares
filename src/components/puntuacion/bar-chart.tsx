@@ -51,10 +51,12 @@ export const BarChart = (props: any) => {
                 }
             </header>
 
-            <div className='grid grid-cols-2'>
+            <div className='grid grid-cols-1 md:grid-cols-2'>
                 <div>
                     <h2 className='text-2xl my-10 font text-white'>{genre || "Selecciona un género"}</h2>
                     {genre && 
+                    <>
+                    <p className='mb-10'>Evolución histórica del promedio de puntuación para este genero de todos los usuarios </p>
                     <div {...props}>
                         <ResponsiveBar
                             data={graf}
@@ -71,38 +73,40 @@ export const BarChart = (props: any) => {
                                 tickSize: 0,
                                 tickValues: 5,
                                 tickPadding: 16,
-                            }}
-                            gridYValues={5}
-                            theme={{
-                                tooltip: {
-                                    chip: {
-                                        borderRadius: "9999px",
-                                    },
-                                    container: {
-                                        fontSize: "12px",
-                                        textTransform: "capitalize",
+                                }}
+                                gridYValues={5}
+                                theme={{
+                                    tooltip: {
+                                        chip: {
+                                            borderRadius: "9999px",
+                                            },
+                                            container: {
+                                                fontSize: "12px",
+                                                textTransform: "capitalize",
                                         borderRadius: "6px",
-                                    },
-                                },
-                                grid: {
-                                    line: {
-                                        stroke: "#f3f4f6",
-                                    },
-                                },
-                            }}
-                            tooltipLabel={({ id }) => `${id}`}
-                            enableLabel={false}
-                            role="application"
-                            ariaLabel="peliculas por rating"
-                        />
+                                        },
+                                        },
+                                        grid: {
+                                            line: {
+                                                stroke: "#f3f4f6",
+                                                },
+                                                },
+                                                }}
+                                                tooltipLabel={({ id }) => `${id}`}
+                                                enableLabel={false}
+                                                role="application"
+                                                ariaLabel="peliculas por rating"
+                                                />
                     </div>
+                    </>
                     }
                 </div>
                 {genre && 
                 <div>
                     <h2 className='text-2xl my-10 font text-white'>Histograma</h2>
+                    <p className='mb-10'> Muestra la puntuación de todos los usuarios para este género.</p>
                     <div {...props}>
-                        <ResponsiveBar
+                    <ResponsiveBar
                             data={histoGraf}
                             keys={["0-18", "19-25", "26-45", "+46"]}
                             indexBy="prop"

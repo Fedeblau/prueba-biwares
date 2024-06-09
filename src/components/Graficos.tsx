@@ -212,38 +212,44 @@ const Graficos: React.FC<GraficosProps> = () => {
 
 
     if (loading) {
-        return<div className="w-full h-screen flex items-center justify-center">
-         <div role="status" className="p-4 w-5/12 mx-4 rounded border border-gray-200 shadow animate-pulse md:p-6 border-gray-700">
-
-        <div className="h-2.5  rounded-full bg-gray-700 w-32 mb-2.5"></div>
-        <div className="mb-10 w-48 h-2  rounded-full bg-gray-700"></div>
-        <div className="flex items-baseline mt-4 space-x-6">
-            <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
-            <div className="w-full h-56  rounded-t-lg bg-gray-700"></div>
-            <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
-            <div className="w-full h-64  rounded-t-lg bg-gray-700"></div>
-            <div className="w-full h-80  rounded-t-lg bg-gray-700"></div>
-            <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
-            <div className="w-full h-80  rounded-t-lg bg-gray-700"></div>
-        </div>
-        <span className="sr-only">Loading...</span>
-        </div>
-         <div role="status" className="p-4 w-5/12 rounded border border-gray-200 shadow animate-pulse md:p-6 border-gray-700">
-
-        <div className="h-2.5  rounded-full bg-gray-700 w-32 mb-2.5"></div>
-        <div className="mb-10 w-48 h-2  rounded-full bg-gray-700"></div>
-        <div className="flex items-baseline mt-4 space-x-6">
-            <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
-            <div className="w-full h-56  rounded-t-lg bg-gray-700"></div>
-            <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
-            <div className="w-full h-64  rounded-t-lg bg-gray-700"></div>
-            <div className="w-full h-80  rounded-t-lg bg-gray-700"></div>
-            <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
-            <div className="w-full h-80  rounded-t-lg bg-gray-700"></div>
-        </div>
-        <span className="sr-only">Loading...</span>
-        </div>
-    </div>;
+        return(<>
+        <h2>Cargando...</h2>
+            <div className="w-full h-screen flex items-center justify-center">
+            <div role="status" className="p-4 w-5/12 mx-4 rounded border border-gray-200 shadow animate-pulse md:p-6 border-gray-700">
+   
+           <div className="h-2.5  rounded-full bg-gray-700 w-32 mb-2.5"></div>
+           <div className="mb-10 w-48 h-2  rounded-full bg-gray-700"></div>
+           <div className="flex items-baseline mt-4 space-x-6">
+               <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
+               <div className="w-full h-56  rounded-t-lg bg-gray-700"></div>
+               <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
+               <div className="w-full h-64  rounded-t-lg bg-gray-700"></div>
+               <div className="w-full h-80  rounded-t-lg bg-gray-700"></div>
+               <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
+               <div className="w-full h-80  rounded-t-lg bg-gray-700"></div>
+           </div>
+           <span className="sr-only">Loading...</span>
+           </div>
+            <div role="status" className="p-4 w-5/12 rounded border border-gray-200 shadow animate-pulse md:p-6 border-gray-700">
+   
+           <div className="h-2.5  rounded-full bg-gray-700 w-32 mb-2.5"></div>
+           <div className="mb-10 w-48 h-2  rounded-full bg-gray-700"></div>
+           <div className="flex items-baseline mt-4 space-x-6">
+               <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
+               <div className="w-full h-56  rounded-t-lg bg-gray-700"></div>
+               <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
+               <div className="w-full h-64  rounded-t-lg bg-gray-700"></div>
+               <div className="w-full h-80  rounded-t-lg bg-gray-700"></div>
+               <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
+               <div className="w-full h-80  rounded-t-lg bg-gray-700"></div>
+           </div>
+           <span className="sr-only">Loading...</span>
+           </div>
+       </div>;
+        </>
+        )
+        
+       
     }
 
     return (
