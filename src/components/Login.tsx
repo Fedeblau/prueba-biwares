@@ -4,10 +4,10 @@ import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "./ui/
 import { InputLogin } from "./ui/inputLogin";
 import { Button } from "./ui/button";
 import { MdLocalMovies } from "react-icons/md";
-import { UserContext } from "../context/userContext";
+import { UserContext, User } from "../context/userContext";
 
 export function Login() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -27,7 +27,7 @@ export function Login() {
     }
   }, [user, navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const foundUser = users.find(user => user.id === username && user['Full Name'] === password);
     if (foundUser) {

@@ -4,15 +4,15 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 
 
-export const BarChart = (props) => {
+export const BarChart = (props: any) => {
     const { data, histograma } = props
-    const [genre, setGenero] = useState(null)
+    const [genre, setGenero] = useState('')
     const [graf, setGraf] = useState(data)
     const [histoGraf, setHistoGraf] = useState(data)
 
     const genres = ['Action', 'Adventure', 'Animation', 'Children\'s', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western'];
 
-    function transformarObjetoAArray(obj) {
+    function transformarObjetoAArray(obj: any) {
         return Object.entries(obj).map(([clave, valor]) => ({
             prop: clave,
             ...valor
@@ -22,17 +22,15 @@ export const BarChart = (props) => {
 
     useEffect(() => {
         if (genre) {
-            setGraf(data.filter(e => e.genre === genre))
+            setGraf(data.filter((e: { genre: any; }) => e.genre === genre))
             console.log("genre", genre)
             const arr = transformarObjetoAArray(histograma[genre])
-            console.log(transformarObjetoAArray(histograma[genre]))
             setHistoGraf(arr)
         }
     }, [genre])
 
 
 
-    console.log("HISTOGRAF!!!! ", histoGraf)
 
 
 
@@ -48,9 +46,9 @@ export const BarChart = (props) => {
 
                 <div>
 
-                
-                        <h2 className='text-2xl my-10 font text-white'>{genre || "Selecciona un género"}</h2>
-                    
+
+                    <h2 className='text-2xl my-10 font text-white'>{genre || "Selecciona un género"}</h2>
+                    {genre && 
                     <div {...props}>
                         <ResponsiveBar
 
@@ -93,17 +91,20 @@ export const BarChart = (props) => {
                             ariaLabel="peliculas por rating"
                         />
                     </div>
+                    }
                 </div>
+                {genre && 
                 <div>
                     <h2 className='text-2xl my-10 font text-white'>Histograma</h2>
                     <div {...props}>
+
                         <ResponsiveBar
                             data={histoGraf}
-                            keys={["0-18","19-25","26-45","+46"]}
+                            keys={["0-18", "19-25", "26-45", "+46"]}
                             indexBy="prop"
                             margin={{ top: 0, right: 0, bottom: 40, left: 40 }}
                             padding={0.3}
-                            
+
                             axisBottom={{
                                 tickSize: 0,
                                 tickPadding: 16,
@@ -131,6 +132,7 @@ export const BarChart = (props) => {
                                     },
                                 },
                             }}
+                            onClick={(x) =>console.log("eventoi", x)}
                             tooltipLabel={({ id }) => `${id}`}
                             enableLabel={false}
                             role="application"
@@ -138,6 +140,7 @@ export const BarChart = (props) => {
                         />
                     </div>
                 </div>
+                }
             </div>
         </>
 

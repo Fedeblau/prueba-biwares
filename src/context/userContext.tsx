@@ -7,13 +7,17 @@ export type ContextType = {
 
 export type User = {
   id: string;
-  full_name: string;
+  'Full Name': string;
   birth: number;
   gender: 'M' | 'F';
   zip_code: string;
 };
 
-export const UserContext = createContext<ContextType | undefined>(undefined);
+// Provide a default value to the context
+export const UserContext = createContext<ContextType>({
+  user: null,
+  setUser: () => {}
+});
 
 type UserProviderProps = {
   children: ReactNode;

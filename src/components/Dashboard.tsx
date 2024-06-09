@@ -12,7 +12,7 @@ import Graficos from './Graficos';
 
 export function Dashboard() {
   const { user, setUser } = useContext(UserContext);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({ ratings: [], peliculas: [] });
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
@@ -93,7 +93,7 @@ export function Dashboard() {
           {activeView === 'graficos' && (
             <div className="grid">
               
-                    {data && <Graficos className=" text-black" data={data} />}
+                    {data && <Graficos  data={data} />}
             </div>
           )}
         </main>
@@ -102,7 +102,7 @@ export function Dashboard() {
   );
 }
 
-function ArrowLeftIcon(props) {
+function ArrowLeftIcon(props:any) {
   return (
     <svg
       {...props}
@@ -121,7 +121,7 @@ function ArrowLeftIcon(props) {
   );
 }
 
-function ArrowRightIcon(props) {
+function ArrowRightIcon(props:any) {
   return (
     <svg
       {...props}

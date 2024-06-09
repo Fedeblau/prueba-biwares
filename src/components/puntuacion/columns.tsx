@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 import { Button } from "../../components/ui/button"
 import { Row } from '@tanstack/react-table'
+import StarRating from "./star-rating"
 
 
 
@@ -12,8 +13,8 @@ export type Pelicula = {
   name: string
   release_date: string
   genero: string[]
-  promedio: number
-  user_score: number | null
+  promedio: number | undefined
+  user_score: number | undefined
 }
 
 
@@ -50,7 +51,7 @@ export const columns: ColumnDef<Pelicula>[] = [
     accessorKey: "genero",
     header: "Géneros",
     cell: ({ row }) => {
-      const genero = row.getValue("genero") as string[]; // Assert the type here
+      const genero = row.getValue("genero") as string[]; 
       return (
         <div className="max-w-[200px] truncate">
           {genero?.join(', ')}
@@ -63,11 +64,55 @@ export const columns: ColumnDef<Pelicula>[] = [
   },
   {
     accessorKey: "promedio",
-    header: "puntaje general",
+    sortingFn: 'alphanumeric',
+    header: ({ column }) => {
+      return (
+        <Button
+          className="ml-0 pl-0 text-wrap w-40"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Puntaje general (Promedio)
+          <ArrowUpDown className="ml-2 h-6 w-6" />
+        </Button>
+      )
+    },
+    cell: ({row})=>{
+      return (
+        <div className="max-w-[200px] text-center truncate">
+          {row.getValue('promedio')}
+        </div>)
+    }
   },
   {
     accessorKey: "user_score",
-    header: "puntaje del usuario",
-  },
+    sortingFn: 'auto',
+    sortUndefined:'last',
+    invertSorting: true,
+    header: ({ column }) => {
+      return (
+        <Button
+          className="ml-0 pl-0"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Puntaje del usuario
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({row})=>{
+      return (
+      row.getValue('user_score') && 
+          <StarRating
+                            currentRating={row.getValue('user_score')}
+                            onRatingChange={row.getValue('user_score')}
+                           
+            />
+          )
+          }
+    },
+    
+  
 
 ]

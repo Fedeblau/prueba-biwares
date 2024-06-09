@@ -42,15 +42,15 @@ export function DataTableFacetedFilter<TData, TValue>({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="borde" size="sm" className="h-8 border-dashed">
-          <PlusCircledIcon className="mr-2 h-4 w-4" />
+        <Button variant="borde" size="sm" className=" border-dashed h-10">
+          <PlusCircledIcon className="mr-2 h-4 w-4 text-slate-500" />
           {title}
           {selectedValues?.size > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />
               <Badge
                 variant="secondary"
-                className="rounded-sm px-1 font-normal lg:hidden"
+                className="rounded-sm px-1 font-normal bg-slate-800 hover:bg-slate-700 text-white lg:hidden"
               >
                 {selectedValues.size}
               </Badge>
@@ -58,7 +58,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                 {selectedValues.size > 2 ? (
                   <Badge
                     variant="secondary"
-                    className="rounded-sm px-1 font-normal"
+                    className="rounded-sm px-1 font-normal bg-slate-800 hover:bg-slate-700 text-white"
                   >
                     {selectedValues.size} selected
                   </Badge>
@@ -69,7 +69,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                       <Badge
                         variant="secondary"
                         key={option.value}
-                        className="rounded-sm px-1 font-normal"
+                        className="rounded-sm px-1 font-normal bg-slate-800 hover:bg-slate-700 text-white"
                       >
                         {option.label}
                       </Badge>
@@ -80,11 +80,12 @@ export function DataTableFacetedFilter<TData, TValue>({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0" align="start">
+      <PopoverContent className="w-[200px] p-0 bg-slate-900" align="start">
         <Command>
           <CommandInput placeholder={title} />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
+            
             <CommandGroup>
               {options.map((option) => {
                 const isSelected = selectedValues.has(option.value)

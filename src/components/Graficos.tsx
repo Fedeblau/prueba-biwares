@@ -41,6 +41,7 @@ type User = {
     gender: string;
     occupation: string;
     zip_code: string;
+    "year of birth": string;
 };
 
 type GenreYearRating = {
@@ -65,9 +66,24 @@ interface GraficosProps {
     };
 }
 
+type GenreRatingCounts = {
+    [genre: string]: {
+        [rating: number]: {
+            count: number;
+            "0-18": number;
+            "19-25": number;
+            "26-45": number;
+            "+46": number;
+            users: Set<number>;
+            movies: Set<number>;
+        };
+    };
+};
+
 const Graficos: React.FC<GraficosProps> = () => {
-    const [data, setData] = useState([]);
-    const [histograma, setHistograma] = useState([]);
+    const [data, setData] = useState<GenreYearAvgRating[]>([]);
+    const [histograma, setHistograma] = useState<GenreRatingCounts>({});
+    const [loading, setLoading] = useState(true);
 
     const genres = ['Action', 'Adventure', 'Animation', 'Children\'s', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western'];
 
@@ -86,7 +102,7 @@ const Graficos: React.FC<GraficosProps> = () => {
 
                 const moviesDict: { [key: string]: Movie } = {};
                 peliculas.forEach(movie => {
-                    moviesDict[movie.id] = movie;
+                    moviesDict[(movie.id as string)] = movie;
                 });
 
                 const genreYearRating: GenreYearRating = {};
@@ -126,29 +142,7 @@ const Graficos: React.FC<GraficosProps> = () => {
                     });
                 });
 
-                function groupRatingsByGenre(ratings, movies) {
-                    const genreRatings = {};
-
-                    movies.forEach(movie => {
-                        Object.keys(movie).forEach(key => {
-                            if (key !== "id" && key !== "Name" && key !== "Release Date" && key !== "IMDB URL" && movie[key] === "1") {
-                                if (!genreRatings[key]) {
-                                    genreRatings[key] = [];
-                                }
-
-                                const movieId = parseInt(movie.id);
-                                const movieRatings = ratings.filter(rating => rating.movie_id === movieId);
-                                movieRatings.forEach(rating => {
-                                    genreRatings[key].push(rating.rating);
-                                });
-                            }
-                        });
-                    });
-
-                    return genreRatings;
-                }
-
-                const genreRatingCounts = {};
+                const genreRatingCounts: GenreRatingCounts = {};
 
                 genres.forEach(genre => {
                     genreRatingCounts[genre] = {
@@ -175,26 +169,18 @@ const Graficos: React.FC<GraficosProps> = () => {
                     }
                 });
 
-            
-            
-              
-
-                
-                const userAges = users.map(e=>1998-parseInt(e['year of birth']))
-               
+                const userAges = users.map(e => 1998 - parseInt(e['year of birth']));
 
                 Object.keys(genreRatingCounts).forEach(genre => {
                     Object.keys(genreRatingCounts[genre]).forEach(rating => {
                         const usersSet = genreRatingCounts[genre][rating].users;
-                        usersSet.forEach(user_id => {
+                        usersSet.forEach((user_id: string | number) => {
                             const age = userAges[user_id];
-                            
-                            if (age*1 <= 18) {
+                            if (age <= 18) {
                                 genreRatingCounts[genre][rating]["0-18"]++;
-                            } else if (age*1 <= 25) {
-                                console.log("entro aca")
+                            } else if (age <= 25) {
                                 genreRatingCounts[genre][rating]["19-25"]++;
-                            } else if (age*1 <= 45) {
+                            } else if (age <= 45) {
                                 genreRatingCounts[genre][rating]["26-45"]++;
                             } else {
                                 genreRatingCounts[genre][rating]["+46"]++;
@@ -210,14 +196,50 @@ const Graficos: React.FC<GraficosProps> = () => {
                 setHistograma(genreRatingCounts);
 
                 setData(genreYearAvgRating);
+                setLoading(false);  
             } catch (error) {
                 console.error("se rompio todo");
+                setLoading(false);  
             }
         };
         fetchData();
     }, []);
 
-    console.log("histograma!!!", histograma);
+
+    if (loading) {
+        return<div className="w-full h-screen flex items-center justify-center">
+         <div role="status" className="p-4 w-5/12 mx-4 rounded border border-gray-200 shadow animate-pulse md:p-6 border-gray-700">
+
+        <div className="h-2.5  rounded-full bg-gray-700 w-32 mb-2.5"></div>
+        <div className="mb-10 w-48 h-2  rounded-full bg-gray-700"></div>
+        <div className="flex items-baseline mt-4 space-x-6">
+            <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
+            <div className="w-full h-56  rounded-t-lg bg-gray-700"></div>
+            <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
+            <div className="w-full h-64  rounded-t-lg bg-gray-700"></div>
+            <div className="w-full h-80  rounded-t-lg bg-gray-700"></div>
+            <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
+            <div className="w-full h-80  rounded-t-lg bg-gray-700"></div>
+        </div>
+        <span className="sr-only">Loading...</span>
+        </div>
+         <div role="status" className="p-4 w-5/12 rounded border border-gray-200 shadow animate-pulse md:p-6 border-gray-700">
+
+        <div className="h-2.5  rounded-full bg-gray-700 w-32 mb-2.5"></div>
+        <div className="mb-10 w-48 h-2  rounded-full bg-gray-700"></div>
+        <div className="flex items-baseline mt-4 space-x-6">
+            <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
+            <div className="w-full h-56  rounded-t-lg bg-gray-700"></div>
+            <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
+            <div className="w-full h-64  rounded-t-lg bg-gray-700"></div>
+            <div className="w-full h-80  rounded-t-lg bg-gray-700"></div>
+            <div className="w-full h-72  rounded-t-lg bg-gray-700"></div>
+            <div className="w-full h-80  rounded-t-lg bg-gray-700"></div>
+        </div>
+        <span className="sr-only">Loading...</span>
+        </div>
+    </div>;
+    }
 
     return (
         <>

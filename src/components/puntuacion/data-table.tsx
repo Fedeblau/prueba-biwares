@@ -87,6 +87,7 @@ export function DataTable<TData extends { id: string }, TValue>({
   const handleSave = (rowId: string) => {
     setData((prevData) =>
       prevData.map((row) =>
+        // @ts-ignore
         ((row.id)*1)-1 == rowId ? { ...row, user_score: newUserScore } : row
       )
     )
@@ -95,19 +96,19 @@ export function DataTable<TData extends { id: string }, TValue>({
 
   return (
     <>
-      <div className="flex w-full items-center py-2">
+      <div className="flex w-full items-center py-4 ">
         <Input
-          placeholder="Busca película"
+          placeholder="Busca una película"
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="w-3/12 h-10 text-base mr-4 bg-slate-900 pl-2"
         />
         {table.getColumn("genero") && (
           <DataTableFacetedFilter
             column={table.getColumn("genero")}
-            title="genero"
+            title="Género"
             options={generos}
           />
         )}
@@ -129,6 +130,7 @@ export function DataTable<TData extends { id: string }, TValue>({
                     </TableHead>
                   )
                 })}
+                <TableHead></TableHead>
               </TableRow>
             ))}
           </TableHeader>
