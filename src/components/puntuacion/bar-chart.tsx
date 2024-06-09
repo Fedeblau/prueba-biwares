@@ -1,16 +1,19 @@
-
 import { ResponsiveBar } from '@nivo/bar';
-import { useEffect, useState } from 'react';
+import {useEffect, useState, useContext} from 'react';
 import { Button } from '@/components/ui/button';
+import {UserContext} from '@/context/userContext';
+
 
 
 export const BarChart = (props: any) => {
-    const { data, histograma } = props
-    const [genre, setGenero] = useState('')
-    const [graf, setGraf] = useState(data)
-    const [histoGraf, setHistoGraf] = useState(data)
-
-    const genres = ['Action', 'Adventure', 'Animation', 'Children\'s', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western'];
+    const { data, histograma, peliculas } = props;
+    const { user, setUser } = useContext(UserContext);
+    const [genre, setGenero] = useState('');
+    const [graf, setGraf] = useState(data);
+    const [histoGraf, setHistoGraf] = useState(data);
+    const [peliPorRating, setPeliPorRating] = useState([]);
+    const [mostrarPeli, setMostrarPeli] = useState([]);
+    const genres = ['Action', 'Adventure', 'Animation', "Children's", 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western'];
 
     function transformarObjetoAArray(obj: any) {
         return Object.entries(obj).map(([clave, valor]) => ({
@@ -19,20 +22,27 @@ export const BarChart = (props: any) => {
         }));
     }
 
-
     useEffect(() => {
         if (genre) {
-            setGraf(data.filter((e: { genre: any; }) => e.genre === genre))
-            console.log("genre", genre)
-            const arr = transformarObjetoAArray(histograma[genre])
-            setHistoGraf(arr)
+            setGraf(data.filter((e: { genre: any; }) => e.genre === genre));
+            const arr = transformarObjetoAArray(histograma[genre]);
+            setHistoGraf(arr);
         }
-    }, [genre])
+    }, [genre]);
 
-
-
-
-
+    useEffect(() => {
+            const pelis = Object.fromEntries(peliPorRating)[user?.id];
+            console.log(pelis)
+            if (pelis) {
+                const res = pelis.map((peliId: number) => {
+                    const peli = peliculas.find((p: { id: number }) => p.id == peliId);
+                    return peli ? peli.Name : 'No votaste ninguna peli en este rango';
+                });
+                console.log("reesssss",res)
+                setMostrarPeli(res);
+        }
+        else{return "No votaste ninguna peli en este rango"}
+    }, [peliPorRating]);
 
     return (
         <>
@@ -43,15 +53,11 @@ export const BarChart = (props: any) => {
             </header>
 
             <div className='grid grid-cols-2'>
-
                 <div>
-
-
                     <h2 className='text-2xl my-10 font text-white'>{genre || "Selecciona un género"}</h2>
                     {genre && 
                     <div {...props}>
                         <ResponsiveBar
-
                             data={graf}
                             keys={["average_rating"]}
                             indexBy="year"
@@ -97,14 +103,12 @@ export const BarChart = (props: any) => {
                 <div>
                     <h2 className='text-2xl my-10 font text-white'>Histograma</h2>
                     <div {...props}>
-
                         <ResponsiveBar
                             data={histoGraf}
                             keys={["0-18", "19-25", "26-45", "+46"]}
                             indexBy="prop"
                             margin={{ top: 0, right: 0, bottom: 40, left: 40 }}
                             padding={0.3}
-
                             axisBottom={{
                                 tickSize: 0,
                                 tickPadding: 16,
@@ -132,7 +136,9 @@ export const BarChart = (props: any) => {
                                     },
                                 },
                             }}
-                            onClick={(x) =>console.log("eventoi", x)}
+                            onClick={(x) => {
+                                setPeliPorRating(x.data.users); 
+                            }}
                             tooltipLabel={({ id }) => `${id}`}
                             enableLabel={false}
                             role="application"
@@ -142,9 +148,11 @@ export const BarChart = (props: any) => {
                 </div>
                 }
             </div>
+            <div>
+                {
+                    mostrarPeli.map((e, index) => <div key={index}>{e}</div>)
+                }
+            </div>
         </>
-
-
     );
-}
-
+};

@@ -74,7 +74,7 @@ type GenreRatingCounts = {
             "19-25": number;
             "26-45": number;
             "+46": number;
-            users: Set<number>;
+            users: Map<number, number[]>;
             movies: Set<number>;
         };
     };
@@ -84,6 +84,7 @@ const Graficos: React.FC<GraficosProps> = () => {
     const [data, setData] = useState<GenreYearAvgRating[]>([]);
     const [histograma, setHistograma] = useState<GenreRatingCounts>({});
     const [loading, setLoading] = useState(true);
+    const [peliculas, setPeliculas] =useState([])
 
     const genres = ['Action', 'Adventure', 'Animation', 'Children\'s', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western'];
 
@@ -104,6 +105,8 @@ const Graficos: React.FC<GraficosProps> = () => {
                 peliculas.forEach(movie => {
                     moviesDict[(movie.id as string)] = movie;
                 });
+
+                setPeliculas(peliculas)
 
                 const genreYearRating: GenreYearRating = {};
 
@@ -146,11 +149,11 @@ const Graficos: React.FC<GraficosProps> = () => {
 
                 genres.forEach(genre => {
                     genreRatingCounts[genre] = {
-                        1: { count: 0, "0-18": 0, "19-25": 0, "26-45": 0, "+46": 0, users: new Set(), movies: new Set() },
-                        2: { count: 0, "0-18": 0, "19-25": 0, "26-45": 0, "+46": 0, users: new Set(), movies: new Set() },
-                        3: { count: 0, "0-18": 0, "19-25": 0, "26-45": 0, "+46": 0, users: new Set(), movies: new Set() },
-                        4: { count: 0, "0-18": 0, "19-25": 0, "26-45": 0, "+46": 0, users: new Set(), movies: new Set() },
-                        5: { count: 0, "0-18": 0, "19-25": 0, "26-45": 0, "+46": 0, users: new Set(), movies: new Set() }
+                        1: { count: 0, "0-18": 0, "19-25": 0, "26-45": 0, "+46": 0, users: new Map(), movies: new Set() },
+                        2: { count: 0, "0-18": 0, "19-25": 0, "26-45": 0, "+46": 0, users: new Map(), movies: new Set() },
+                        3: { count: 0, "0-18": 0, "19-25": 0, "26-45": 0, "+46": 0, users: new Map(), movies: new Set() },
+                        4: { count: 0, "0-18": 0, "19-25": 0, "26-45": 0, "+46": 0, users: new Map(), movies: new Set() },
+                        5: { count: 0, "0-18": 0, "19-25": 0, "26-45": 0, "+46": 0, users: new Map(), movies: new Set() }
                     };
                 });
 
@@ -162,8 +165,11 @@ const Graficos: React.FC<GraficosProps> = () => {
                             if (movie[genre] === "1") {
                                 const genreData = genreRatingCounts[genre][userRating];
                                 genreData.count++;
-                                genreData.users.add(user_id);
                                 genreData.movies.add(movie_id);
+                                if (!genreData.users.has(user_id)) {
+                                    genreData.users.set(user_id, []);
+                                }
+                                genreData.users.get(user_id).push(movie_id);
                             }
                         });
                     }
@@ -173,8 +179,8 @@ const Graficos: React.FC<GraficosProps> = () => {
 
                 Object.keys(genreRatingCounts).forEach(genre => {
                     Object.keys(genreRatingCounts[genre]).forEach(rating => {
-                        const usersSet = genreRatingCounts[genre][rating].users;
-                        usersSet.forEach((user_id: string | number) => {
+                        const usersMap = genreRatingCounts[genre][rating].users;
+                        usersMap.forEach((movies, user_id) => {
                             const age = userAges[user_id];
                             if (age <= 18) {
                                 genreRatingCounts[genre][rating]["0-18"]++;
@@ -186,8 +192,8 @@ const Graficos: React.FC<GraficosProps> = () => {
                                 genreRatingCounts[genre][rating]["+46"]++;
                             }
                         });
-                        genreRatingCounts[genre][rating].users = Array.from(usersSet);
-                        genreRatingCounts[genre][rating].movies = Array.from(genreRatingCounts[genre][rating].movies);
+                        genreRatingCounts[genre][rating].users = new Map(usersMap);
+                        genreRatingCounts[genre][rating].movies = new Set(genreRatingCounts[genre][rating].movies);
                     });
                 });
 
@@ -243,7 +249,7 @@ const Graficos: React.FC<GraficosProps> = () => {
 
     return (
         <>
-            <BarChart className="aspect-[6/3] max-w-[75vw] text-black" data={data} histograma={histograma} />
+            <BarChart className="aspect-[6/3] max-w-[75vw] text-black" data={data} histograma={histograma} peliculas={peliculas}/>
         </>
     );
 };
