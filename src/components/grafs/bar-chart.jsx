@@ -1,11 +1,9 @@
 import { ResponsiveBar } from '@nivo/bar';
-import {useEffect, useState, useContext} from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Button } from '@/components/ui/button';
-import {UserContext} from '@/context/userContext';
+import { UserContext } from '@/context/userContext';
 
-
-
-export const BarChart = (props: any) => {
+export const BarChart = (props) => {
     const { data, histograma, peliculas } = props;
     const { user, setUser } = useContext(UserContext);
     const [genre, setGenero] = useState('');
@@ -15,7 +13,7 @@ export const BarChart = (props: any) => {
     const [mostrarPeli, setMostrarPeli] = useState(["No hay títulos que mostrar"]);
     const genres = ['Action', 'Adventure', 'Animation', "Children's", 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western'];
 
-    function transformarObjetoAArray(obj: any) {
+    function transformarObjetoAArray(obj) {
         return Object.entries(obj).map(([clave, valor]) => ({
             prop: clave,
             ...valor
@@ -24,7 +22,7 @@ export const BarChart = (props: any) => {
 
     useEffect(() => {
         if (genre) {
-            setGraf(data.filter((e: { genre: any; }) => e.genre === genre));
+            setGraf(data.filter(e => e.genre === genre));
             const arr = transformarObjetoAArray(histograma[genre]);
             setHistoGraf(arr);
         }
@@ -34,13 +32,14 @@ export const BarChart = (props: any) => {
             const pelis = Object.fromEntries(peliPorRating)[user?.id];
             
             if (pelis) {
-                const res = pelis.map((peliId: number) => {
-                    const peli = peliculas.find((p: { id: number }) => p.id == peliId);
+                const res = pelis.map(peliId => {
+                    const peli = peliculas.find(p => p.id == peliId);
                     return peli ? peli.Name : 'No votaste ninguna peli en este rango';
                 });
                 setMostrarPeli(res);
+        } else {
+            setMostrarPeli(["No hay títulos que mostrar"]);
         }
-        else{setMostrarPeli(["No hay títulos que mostrar"])}
     }, [peliPorRating]);
 
     return (

@@ -4,10 +4,10 @@ import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "./ui/
 import { InputLogin } from "./ui/inputLogin";
 import { Button } from "./ui/button";
 import { MdLocalMovies } from "react-icons/md";
-import { UserContext, User } from "../context/userContext";
+import { UserContext } from "../context/userContext";
 
 export function Login() {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -27,42 +27,31 @@ export function Login() {
     }
   }, [user, navigate]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const foundUser = users.find(user => user.id === username && user['Full Name'] === password);
-    if (foundUser) {
-      setUser(foundUser);
-      setMessage(`Login Exitoso: ${JSON.stringify(foundUser)}`);
-      navigate('/dashboard');
-    } else {
+  
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+  
+    try {
+      const response = await fetch(`https://script.google.com/macros/s/AKfycbwvLmjGa2cRvO5keURFsbZPoDgG-ryKL9nh41LVHKW6RuVeOobGJa1t8aW3KVIcHj2l0A/exec?id=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        const foundUser = data.user;
+        if (foundUser) {
+          setUser(foundUser);
+          setMessage(`Login Exitoso: ${JSON.stringify(foundUser)}`);
+          navigate('/dashboard');
+        } else {
+          setMessage("Usuario o contraseña incorrectos");
+        }
+      } else {
+        setMessage("Error en la solicitud");
+      }
+    } catch (error) {
       setMessage("Usuario o contraseña incorrectos");
     }
   };
-
-
-//   const handleLogin = async (event: React.FormEvent) => {
-//     event.preventDefault();
-
-//     try {
-//         const response = await fetch('https://script.google.com/macros/s/AKfycbyzFbdkHoPBORZcFBX1Ob-cp0W6qHa3hUWBXrBg35sceGmpjUZlRjMwt44tj3z_D4Dtgw/exec?id=${username}&password=${password}', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({ userId, password })
-//         });
-
-//         if (response.ok) {
-//             const data = await response.json();
-//             setLoginResponse(data);
-//             setError(''); // Clear any previous errors
-//         } else {
-//             setError('Invalid login credentials');
-//         }
-//     } catch (error) {
-//         setError('An error occurred during login. Please try again.');
-//     }
-// };
 
   return (
     <Card className="mx-auto w-[30rem] border-none bg-black max-w-md font-body text-white">
@@ -74,7 +63,7 @@ export function Login() {
         <CardDescription className="text-center dark:text-white text-md"> Ingresa a tu cuenta.</CardDescription>
       </CardHeader>
       <CardContent className="mt-5">
-        <form onSubmit={handleSubmit} className="space-y-16">
+        <form onSubmit={handleLogin} className="space-y-16">
           <div className="space-y-20">
             <InputLogin
               id="username"

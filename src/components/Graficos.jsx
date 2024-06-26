@@ -1,88 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { BarChart } from "./puntuacion/bar-chart";
+import { BarChart } from "./grafs/bar-chart";
 
-type Rating = {
-    index: number;
-    user_id: number;
-    movie_id: number;
-    rating: number;
-    Date: string;
-};
 
-type Movie = {
-    id: string;
-    Name: string;
-    "Release Date": string;
-    "IMDB URL": string;
-    unknown: string;
-    Action: string;
-    Adventure: string;
-    Animation: string;
-    "Children's": string;
-    Comedy: string;
-    Crime: string;
-    Documentary: string;
-    Drama: string;
-    Fantasy: string;
-    "Film-Noir": string;
-    Horror: string;
-    Musical: string;
-    Mystery: string;
-    Romance: string;
-    "Sci-Fi": string;
-    Thriller: string;
-    War: string;
-    Western: string;
-};
-
-type User = {
-    user_id: number;
-    age: number;
-    gender: string;
-    occupation: string;
-    zip_code: string;
-    "year of birth": string;
-};
-
-type GenreYearRating = {
-    [genre: string]: {
-        [year: number]: {
-            total_rating: number;
-            count: number;
-        };
-    };
-};
-
-type GenreYearAvgRating = {
-    genre: string;
-    year: number;
-    average_rating: number;
-};
-
-interface GraficosProps {
-    data: {
-        ratings: Rating[];
-        peliculas: Movie[];
-    };
-}
-
-type GenreRatingCounts = {
-    [genre: string]: {
-        [rating: number]: {
-            count: number;
-            "0-18": number;
-            "19-25": number;
-            "26-45": number;
-            "+46": number;
-            users: Map<number, number[]>;
-            movies: Set<number>;
-        };
-    };
-};
-
-const Graficos: React.FC<GraficosProps> = () => {
-    const [data, setData] = useState<GenreYearAvgRating[]>([]);
-    const [histograma, setHistograma] = useState<GenreRatingCounts>({});
+const Graficos = () => {
+    const [data, setData] = useState([]);
+    const [histograma, setHistograma] = useState({});
     const [loading, setLoading] = useState(true);
     const [peliculas, setPeliculas] =useState([])
 
@@ -97,18 +19,18 @@ const Graficos: React.FC<GraficosProps> = () => {
                     fetch('https://script.google.com/macros/s/AKfycbyzFbdkHoPBORZcFBX1Ob-cp0W6qHa3hUWBXrBg35sceGmpjUZlRjMwt44tj3z_D4Dtgw/exec')
                 ]);
 
-                const peliculas = await response1.json() as Movie[];
-                const ratings = await response2.json() as Rating[];
-                const users = await response3.json() as User[];
+                const peliculas = await response1.json()
+                const ratings = await response2.json()
+                const users = await response3.json() 
 
-                const moviesDict: { [key: string]: Movie } = {};
+                const moviesDict = {};
                 peliculas.forEach(movie => {
-                    moviesDict[(movie.id as string)] = movie;
+                    moviesDict[(movie.id)] = movie;
                 });
 
                 setPeliculas(peliculas)
 
-                const genreYearRating: GenreYearRating = {};
+                const genreYearRating = {};
 
                 ratings.forEach(rating => {
                     const movie = moviesDict[rating.movie_id];
@@ -131,7 +53,7 @@ const Graficos: React.FC<GraficosProps> = () => {
                     }
                 });
 
-                const genreYearAvgRating: GenreYearAvgRating[] = [];
+                const genreYearAvgRating = [];
 
                 Object.keys(genreYearRating).forEach(genre => {
                     Object.keys(genreYearRating[genre]).forEach(year => {
@@ -145,7 +67,7 @@ const Graficos: React.FC<GraficosProps> = () => {
                     });
                 });
 
-                const genreRatingCounts: GenreRatingCounts = {};
+                const genreRatingCounts = {};
 
                 genres.forEach(genre => {
                     genreRatingCounts[genre] = {
@@ -230,7 +152,7 @@ const Graficos: React.FC<GraficosProps> = () => {
            </div>
            <span className="sr-only">Loading...</span>
            </div>
-            <div role="status" className="p-4 w-5/12 rounded border border-gray-200 shadow animate-pulse md:p-6 border-gray-700">
+            <div role="status" className="p-4 w-5/12 rounded border shadow animate-pulse md:p-6 border-gray-700">
    
            <div className="h-2.5  rounded-full bg-gray-700 w-32 mb-2.5"></div>
            <div className="mb-10 w-48 h-2  rounded-full bg-gray-700"></div>

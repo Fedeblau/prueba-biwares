@@ -1,26 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { DataTable } from './puntuacion/data-table';
-import { Pelicula, columns } from './puntuacion/columns';
+import { columns } from './puntuacion/columns';
 import { UserContext } from '../context/userContext';
-import { Skeleton } from "../components/ui/skeleton"
-
-
-type Item = {
-    id: string;
-    Name: string;
-    'Release Date': string;
-    [key: string]: any; 
-}
-
-type Rating = {
-    movie_id: string;
-    rating: number;
-}
-
-type Promedio = {
-    movie_id: number;
-    promedio: number;
-}
+import { Skeleton } from "./ui/skeleton"
 
 const genres = ['Action', 'Adventure', 'Animation', 'Children\'s', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western'];
 
@@ -32,7 +14,7 @@ const Loader = () => (
 const Puntuacion = () => {
     const { user } = useContext(UserContext);
 
-    const [data, setData] = useState<Pelicula[]>([]);
+    const [data, setData] = useState([]);
 
     const [loading, setLoading] = useState(true); 
 
@@ -47,9 +29,9 @@ const Puntuacion = () => {
                         fetch(`https://script.google.com/macros/s/AKfycbyGZPRQ0tqucsonA5a9MpFZi9-hblcSI6fvguMtrmBjfC5z3CU1IywBWblBwii4_mZg6Q/exec?id=${user.id}`)
                     ]);
 
-                    const data1 = await response1.json() as Item[];
-                    const ratings = await response2.json() as Rating[];
-                    const userRatings = await response3.json() as Rating[];
+                    const data1 = await response1.json();
+                    const ratings = await response2.json();
+                    const userRatings = await response3.json();
 
                    
                     const peliculas = data1.map(item => {
@@ -69,14 +51,14 @@ const Puntuacion = () => {
                         }
                     
                     });
-                    function calcularPromedio(arr: number[]): number {
+                    function calcularPromedio(arr) {
                         const sum = arr.reduce((total, current) => total + current, 0);
                         const prom = Math.round((sum / arr.length) * 10) / 10
                         return prom;
                     }
 
-                    function calcularPromedioPorMovieId(ratings: Rating[]): Promedio[] {
-                        const promedios: { [key: string]: number[] } = {};
+                    function calcularPromedioPorMovieId(ratings) {
+                        const promedios = {};
 
                    
                         ratings.forEach(rating => {
@@ -87,7 +69,7 @@ const Puntuacion = () => {
                         });
 
                      
-                        const result: Promedio[] = [];
+                        const result = [];
                         for (const movie_id in promedios) {
                             if (promedios.hasOwnProperty(movie_id)) {
                                 const promedio = calcularPromedio(promedios[movie_id]);
@@ -99,7 +81,7 @@ const Puntuacion = () => {
                     }
 
                  
-                    const promedioPorMovieId: Promedio[] = calcularPromedioPorMovieId(ratings);
+                    const promedioPorMovieId = calcularPromedioPorMovieId(ratings);
 
                   
                     const peliculasConPromedio = peliculas.map(pelicula => {

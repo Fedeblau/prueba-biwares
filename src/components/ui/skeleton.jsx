@@ -4,7 +4,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 function Skeleton({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}) {
   return (
     <div className="flex flex-col items-center justify-center  w-full h-screen text-white">
       <h2>Cargando...</h2>

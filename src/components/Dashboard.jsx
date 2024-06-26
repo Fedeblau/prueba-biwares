@@ -2,8 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/userContext';
 import { Button } from "./ui/button";
 import { DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "./ui/dropdown-menu";
-import { CardDescription, CardHeader, CardContent, Card } from "./ui/card";
-import { ResponsiveBar } from "@nivo/bar";
 import Puntuacion from './Puntuacion';
 import { StarFilledIcon } from '@radix-ui/react-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -28,7 +26,6 @@ export function Dashboard() {
     }
   }, [user, navigate]);
 
-  // Actualiza la vista activa basada en la ruta actual
   const activeView = location.pathname.includes('graficos') ? 'graficos' : 'puntuacion';
 
   const handleLogout = () => {
@@ -42,7 +39,7 @@ export function Dashboard() {
 
   return (
     <div className="grid h-screen min-h-screen w-full bg-slate-950 text-white">
-      <div className={`fixed left-0 top-0 w-[280px] h-full bg-slate-900 text-white transform transition-transform duration-300 ${isSidebarVisible ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`fixed z-20 left-0 top-0 w-[280px] h-full bg-slate-900 text-white transform transition-transform duration-300 ${isSidebarVisible ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="border-t fixed w-full mt-[59px] pt-10 flex-1">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
             <button
@@ -88,11 +85,10 @@ export function Dashboard() {
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="flex flex-1 w-full bg-slate-950 flex-col gap-4 p-4 md:gap-8 md:p-6">
+        <main className="flex flex-1  bg-slate-950 flex-col gap-4 p-4 md:gap-8 md:p-6">
           {activeView === 'puntuacion' && <Puntuacion />}
           {activeView === 'graficos' && (
             <div className="grid">
-              
                     {data && <Graficos  data={data} />}
             </div>
           )}
@@ -102,7 +98,7 @@ export function Dashboard() {
   );
 }
 
-function ArrowLeftIcon(props:any) {
+function ArrowLeftIcon(props) {
   return (
     <svg
       {...props}
@@ -121,7 +117,7 @@ function ArrowLeftIcon(props:any) {
   );
 }
 
-function ArrowRightIcon(props:any) {
+function ArrowRightIcon(props) {
   return (
     <svg
       {...props}
