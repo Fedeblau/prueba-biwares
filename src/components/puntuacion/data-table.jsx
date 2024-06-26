@@ -105,12 +105,15 @@ export const DataTable = ({ columns, data: initialData }) => {
       </div>
       <div className="rounded-md border overflow-x-auto">
         <Table className="w-full flex flex-col">
-          <TableHeader className="flex w-full">
+          <TableHeader className="flex w-full items-center">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="flex w-full">
-                {headerGroup.headers.map((header) => {
+              <TableRow key={headerGroup.id} className="flex w-full items-center">
+                {headerGroup.headers.map((header, index) => {
                   return (
-                    <TableHead key={header.id} className="flex-1 min-w-[150px] p-2">
+                    <TableHead
+                      key={header.id}
+                      className={`flex-1 items-center p-2 ${index === 0 ? 'min-w-[40px] max-w-[40px]' : ''}`}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -120,7 +123,7 @@ export const DataTable = ({ columns, data: initialData }) => {
                     </TableHead>
                   );
                 })}
-                <TableHead className="flex-1 min-w-[150px] p-2"></TableHead>
+                <TableHead className="flex-1 min-w-[30px] p-2"></TableHead>
               </TableRow>
             ))}
           </TableHeader>
@@ -128,8 +131,11 @@ export const DataTable = ({ columns, data: initialData }) => {
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} className="flex w-full" data-state={row.getIsSelected() && "selected"}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="flex-1 min-w-[150px] p-2">
+                  {row.getVisibleCells().map((cell, index) => (
+                    <TableCell
+                      key={cell.id}
+                      className={`flex-1 min-w-[150px] p-2 ${index === 0 ? 'min-w-[40x] max-w-[40px]' : ''}`}
+                    >
                       {cell.column.id === "user_score" && row.id === editingRowId ? (
                         <StarRating
                           isEditing={editingRowId}

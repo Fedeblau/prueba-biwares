@@ -18,6 +18,11 @@ export const columns: ColumnDef<Pelicula>[] = [
   {
     accessorKey: "id",
     header: "Id",
+    cell: ({ row }) => (
+      <div className="w-8 text-base">
+        {row.getValue("id")}
+      </div>
+    ),
   },
   {
     accessorKey: "name",
@@ -33,14 +38,13 @@ export const columns: ColumnDef<Pelicula>[] = [
     sortingFn: "datetime",
     header: ({ column }) => {
       return (
-        <Button
-          className=""
-          variant="ghost"
+        <div
+          className="max-w-[150px] pl-2 flex"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Fecha De Lanzamiento
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+          Lanzamiento
+          <ArrowUpDown className="ml-2 h-4 w-4 pt-[2px]" />
+        </div>
       );
     },
     cell: ({ row }) => <div className="px-5">{row.getValue("release_date")}</div>,
@@ -62,14 +66,13 @@ export const columns: ColumnDef<Pelicula>[] = [
     sortingFn: "alphanumeric",
     header: ({ column }) => {
       return (
-        <Button
-          className="ml-0 pl-0 text-wrap w-40"
-          variant="ghost"
+        <div
+          className="ml-0 flex items-center pl-0 text-wrap w-40"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Puntaje general (Promedio)
-          <ArrowUpDown className="ml-2 h-6 w-6" />
-        </Button>
+          Puntaje general
+          <ArrowUpDown className="ml-2 h-4 w-4 pt-[2px]" />
+        </div>
       );
     },
     cell: ({ row }) => {
@@ -87,14 +90,13 @@ export const columns: ColumnDef<Pelicula>[] = [
     invertSorting: true,
     header: ({ column }) => {
       return (
-        <Button
-          className="ml-0 pl-2"
-          variant="ghost"
+        <div
+          className="ml-0 pl-2 flex items-center"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Puntaje del usuario
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+          <ArrowUpDown className="ml-2 h-4 w-4 pt-[2px]" />
+        </div>
       );
     },
     cell: ({ row }) => {
